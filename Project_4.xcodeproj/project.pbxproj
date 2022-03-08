@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		AA71B5AA27D7033B00F0FF26 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA71B5A927D7033B00F0FF26 /* main.cpp */; };
+		AA71B5B227D7342100F0FF26 /* PersonProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA71B5B027D7342100F0FF26 /* PersonProfile.cpp */; };
+		AA71B5B527D7347B00F0FF26 /* AttributeTranslator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA71B5B327D7347B00F0FF26 /* AttributeTranslator.cpp */; };
+		AA71B5B827D734D400F0FF26 /* MemberDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA71B5B627D734D400F0FF26 /* MemberDatabase.cpp */; };
+		AA71B5BB27D7350B00F0FF26 /* MatchMaker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA71B5B927D7350B00F0FF26 /* MatchMaker.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +29,14 @@
 /* Begin PBXFileReference section */
 		AA71B5A627D7033B00F0FF26 /* Project_4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Project_4; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA71B5A927D7033B00F0FF26 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		AA71B5B027D7342100F0FF26 /* PersonProfile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PersonProfile.cpp; sourceTree = "<group>"; };
+		AA71B5B127D7342100F0FF26 /* PersonProfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PersonProfile.h; sourceTree = "<group>"; };
+		AA71B5B327D7347B00F0FF26 /* AttributeTranslator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AttributeTranslator.cpp; sourceTree = "<group>"; };
+		AA71B5B427D7347B00F0FF26 /* AttributeTranslator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributeTranslator.h; sourceTree = "<group>"; };
+		AA71B5B627D734D400F0FF26 /* MemberDatabase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MemberDatabase.cpp; sourceTree = "<group>"; };
+		AA71B5B727D734D400F0FF26 /* MemberDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemberDatabase.h; sourceTree = "<group>"; };
+		AA71B5B927D7350B00F0FF26 /* MatchMaker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MatchMaker.cpp; sourceTree = "<group>"; };
+		AA71B5BA27D7350B00F0FF26 /* MatchMaker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MatchMaker.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +70,14 @@
 			isa = PBXGroup;
 			children = (
 				AA71B5A927D7033B00F0FF26 /* main.cpp */,
+				AA71B5B127D7342100F0FF26 /* PersonProfile.h */,
+				AA71B5B027D7342100F0FF26 /* PersonProfile.cpp */,
+				AA71B5B427D7347B00F0FF26 /* AttributeTranslator.h */,
+				AA71B5B327D7347B00F0FF26 /* AttributeTranslator.cpp */,
+				AA71B5B727D734D400F0FF26 /* MemberDatabase.h */,
+				AA71B5B627D734D400F0FF26 /* MemberDatabase.cpp */,
+				AA71B5BA27D7350B00F0FF26 /* MatchMaker.h */,
+				AA71B5B927D7350B00F0FF26 /* MatchMaker.cpp */,
 			);
 			path = Project_4;
 			sourceTree = "<group>";
@@ -119,6 +139,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA71B5B827D734D400F0FF26 /* MemberDatabase.cpp in Sources */,
+				AA71B5B527D7347B00F0FF26 /* AttributeTranslator.cpp in Sources */,
+				AA71B5BB27D7350B00F0FF26 /* MatchMaker.cpp in Sources */,
+				AA71B5B227D7342100F0FF26 /* PersonProfile.cpp in Sources */,
 				AA71B5AA27D7033B00F0FF26 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
