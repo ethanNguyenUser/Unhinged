@@ -37,6 +37,10 @@
 		AA71B5B727D734D400F0FF26 /* MemberDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemberDatabase.h; sourceTree = "<group>"; };
 		AA71B5B927D7350B00F0FF26 /* MatchMaker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MatchMaker.cpp; sourceTree = "<group>"; };
 		AA71B5BA27D7350B00F0FF26 /* MatchMaker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MatchMaker.h; sourceTree = "<group>"; };
+		AA71B5BC27D813A900F0FF26 /* provided.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = provided.h; sourceTree = "<group>"; };
+		AA71B5BD27D813B400F0FF26 /* translator.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = translator.txt; path = Project_4/translator.txt; sourceTree = "<group>"; };
+		AA71B5BE27D813B400F0FF26 /* members.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = members.txt; path = Project_4/members.txt; sourceTree = "<group>"; };
+		AA71B5C027D824F200F0FF26 /* RadixTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RadixTree.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,8 @@
 		AA71B59D27D7033B00F0FF26 = {
 			isa = PBXGroup;
 			children = (
+				AA71B5BE27D813B400F0FF26 /* members.txt */,
+				AA71B5BD27D813B400F0FF26 /* translator.txt */,
 				AA71B5A827D7033B00F0FF26 /* Project_4 */,
 				AA71B5A727D7033B00F0FF26 /* Products */,
 			);
@@ -69,6 +75,7 @@
 		AA71B5A827D7033B00F0FF26 /* Project_4 */ = {
 			isa = PBXGroup;
 			children = (
+				AA71B5BC27D813A900F0FF26 /* provided.h */,
 				AA71B5A927D7033B00F0FF26 /* main.cpp */,
 				AA71B5B127D7342100F0FF26 /* PersonProfile.h */,
 				AA71B5B027D7342100F0FF26 /* PersonProfile.cpp */,
@@ -78,6 +85,7 @@
 				AA71B5B627D734D400F0FF26 /* MemberDatabase.cpp */,
 				AA71B5BA27D7350B00F0FF26 /* MatchMaker.h */,
 				AA71B5B927D7350B00F0FF26 /* MatchMaker.cpp */,
+				AA71B5C027D824F200F0FF26 /* RadixTree.h */,
 			);
 			path = Project_4;
 			sourceTree = "<group>";
