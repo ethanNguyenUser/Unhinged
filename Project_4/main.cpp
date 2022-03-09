@@ -15,23 +15,48 @@ const std::string TRANSLATOR_FILE = "translator.txt";
 bool findMatches(const MemberDatabase& mdb, const AttributeTranslator& at);
 
 int main() {
-    MemberDatabase mdb;
-    if (!mdb.LoadDatabase(MEMBERS_FILE))
-    {
-        std::cout << "Error loading " << MEMBERS_FILE << std::endl;
-        return 1;
-    }
-    AttributeTranslator at;
-    if (!at.Load(TRANSLATOR_FILE))
-    {
-        std::cout << "Error loading " << TRANSLATOR_FILE << std::endl;
-        return 1;
-    }
+//    MemberDatabase mdb;
+//    if (!mdb.LoadDatabase(MEMBERS_FILE))
+//    {
+//        std::cout << "Error loading " << MEMBERS_FILE << std::endl;
+//        return 1;
+//    }
+//    AttributeTranslator at;
+//    if (!at.Load(TRANSLATOR_FILE))
+//    {
+//        std::cout << "Error loading " << TRANSLATOR_FILE << std::endl;
+//        return 1;
+//    }
+//
+//    while (findMatches(mdb, at))
+//        ;
+//
+//    std::cout << "Happy dating!" << std::endl;
+    
+    RadixTree<int> r;
+//    r.insert("hi", 1);
+//    r.insert("hi", 2);
+//    r.insert("hit", 3);
+//    r.insert("hill", 4);
+//    r.insert("hilt", 5);
+//    r.insert("hills", 6);
+//    r.insert("hilts", 7);
+//    r.insert("hilts", 8);
+//    r.print();
 
-    while (findMatches(mdb, at))
-        ;
+    RadixTree<int> t;
+    t.insert("card", 1);
+//    t.insert("carry", -1);
+//    t.insert("carbs", -2);
+    t.insert("coin", 2);
+    t.insert("cash", 3);
+    t.insert("coin", 4);
+    t.insert("bash", 5);
+    t.insert("cause", 6);
+    t.insert("cause", 7);
+    t.insert("car", 8);
+    t.print();
 
-    std::cout << "Happy dating!" << std::endl;
 }
 
 bool findMatches(const MemberDatabase& mdb, const AttributeTranslator& at)

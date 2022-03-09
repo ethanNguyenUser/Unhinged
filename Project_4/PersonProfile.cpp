@@ -8,25 +8,19 @@
 #include "PersonProfile.h"
 
 //This constructs a PersonProfile object, specifying the member’s name and email address.
-PersonProfile::PersonProfile(std::string name, std::string email){
-    //TODO: Stub
-}
+PersonProfile::PersonProfile(std::string name, std::string email) : name(name), email(email), numAVPairs(0){}
 
 //You may define a destructor for PersonProfile if you need one.
-PersonProfile::~PersonProfile(){
-    //TODO: Stub
-}
+PersonProfile::~PersonProfile(){}
 
 //std::string GetName() const
 std::string PersonProfile::GetName() const{
-    //TODO: Stub
-    return "";
+    return name;
 }
 
 //The getName method returns the member’s email address.
 std::string PersonProfile::GetEmail() const{
-    //TODO: Stub
-    return "";
+    return email;
 }
 
 //The AddAttValPair method is used to add a new attribute-value pair to the member’s profile. If
@@ -35,21 +29,31 @@ std::string PersonProfile::GetEmail() const{
 //map can have the same attribute, as long as their corresponding values are different. We place
 //no requirements on the order that you must store your attribute-value pairs.
 void PersonProfile::AddAttValPair(const AttValPair& attval){
-    //TODO: Stub
+    //if the pair is found/already exists, return
+    if(avPairs.search(attval.attribute) != nullptr)
+        return;
+    avPairs.insert(attval.attribute, attval.value);
+    numAVPairs++;
+    attributes.push_back(attval.attribute);
 }
 
 //This method returns the total number of distinct attribute-value pairs associated with this
 //member
 int PersonProfile::GetNumAttValPairs() const{
-    //TODO: Stub
-    return 0;
+    return numAVPairs;
 }
 
 //This method gets the attribute-value pair specified by attribute_num (where 0 <= attribute_num
 // < GetNumAttValPairs()) and places it in the attval parameter. The method returns true if it
-//successfully retrieves an attribute; otherwise, it returns false and leaves attval unchanged. If you
-//write a loop like this
+//successfully retrieves an attribute; otherwise, it returns false and leaves attval unchanged.
 bool PersonProfile::GetAttVal(int attribute_num, AttValPair& attval) const{
-    //TODO: Stub
-    return false;
+    std::string* s = avPairs.search(attributes[attribute_num]);
+    
+    //if nothing found, return false
+    if(s == nullptr)
+        return false;
+    
+    //otherwise, return an AttVallPair
+    attval = AttValPair(attributes[attribute_num], *s);
+    return true;
 }

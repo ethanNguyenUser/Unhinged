@@ -9,6 +9,7 @@
 #define PersonProfile_h
 
 #include "provided.h"
+#include <vector>
 #include "RadixTree.h"
 
 //●MUST be able to add and retrieve attribute-value pairs in better than O(N) time where N
@@ -50,6 +51,12 @@ public:
     //successfully retrieves an attribute; otherwise, it returns false and leaves attval unchanged. If you
     //write a loop like this
     bool GetAttVal(int attribute_num, AttValPair& attval) const;
+private:
+    std::string name;
+    std::string email;
+    RadixTree<std::string> avPairs;
+    int numAVPairs;
+    std::vector<std::string> attributes;
 };
 
 #endif /* PersonProfile_h */

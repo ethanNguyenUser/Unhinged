@@ -6,18 +6,17 @@
 //
 
 #include "AttributeTranslator.h"
+#include <fstream>
 
 //This is the AttributeTranslator constructor. It must take no arguments.
 AttributeTranslator::AttributeTranslator(){
-    //TODO: Stub
     
 }
 
 //You may define a destructor for AttributeTranslator if you need one to free any dynamically
 //allocated memory used by your object.
 AttributeTranslator::~AttributeTranslator(){
-    //TODO: Stub
-
+    
 }
 
 //This method loads the attribute-value translation data from the data file specified by the
@@ -25,8 +24,44 @@ AttributeTranslator::~AttributeTranslator(){
 //translation of attribute-value pairs (meeting the big-O requirements at the top of this section).
 //The method must return true if the file was successfully loaded and false otherwise.
 bool AttributeTranslator::Load(std::string filename){
-    //TODO: Stub
-    return false;
+    std::ifstream inFile;
+    inFile.open(filename);
+    
+    //check file opened
+    if (!inFile)
+        return false;
+
+    std::string line;
+    while (getline(inFile, line)) {
+        if(line == "")
+            continue;
+        int i = 0;
+        std::string sourceA = "";
+        std::string sourceV = "";
+        std::string compA = "";
+        std::string compV = "";
+
+        for(; line[i] != ','; i++)
+            sourceA += line[i];
+        i++;
+        for(; line[i] != ','; i++)
+            sourceV += line[i];
+        i++;
+        for(; line[i] != ','; i++)
+            compA += line[i];
+        i++;
+        for(; i != line.size(); i++)
+            compV += line[i];
+        
+        sourceAVPairs.insert(sourceA, sourceV);
+        sourceKeys.push_back(sourceA);
+        
+        compAVPairs.insert(compA, compV);
+        compKeys.push_back(compA);
+    }
+    inFile.close();
+    
+    return true;
 }
 
 //This method must identify all compatible attribute-value pairs for the specified source attribute-
@@ -36,7 +71,6 @@ bool AttributeTranslator::Load(std::string filename){
 //returned must not contain two attribute-value pairs with the same attributes and values (i.e., no
 //duplicates).
 std::vector<AttValPair> AttributeTranslator::FindCompatibleAttValPairs(const AttValPair& source) const{
-    //TODO: Stub
     std::vector<AttValPair> v;
     return v;
 }

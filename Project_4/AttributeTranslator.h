@@ -10,6 +10,7 @@
 
 #include <vector>
 #include "provided.h"
+#include "RadixTree.h"
 
 //●MUST be able to retrieve all related attribute-value pairs for a specified source attribute-
 //value pair in better than O(N) time where N is the number of source attribute-value pairs
@@ -46,7 +47,11 @@ public:
     //returned must not contain two attribute-value pairs with the same attributes and values (i.e., no
     //duplicates).
     std::vector<AttValPair> FindCompatibleAttValPairs(const AttValPair& source) const;
-    
+private:
+    RadixTree<std::string> sourceAVPairs;
+    RadixTree<std::string> compAVPairs;
+    std::vector<std::string> sourceKeys;
+    std::vector<std::string> compKeys;
 };
 
 #endif /* AttributeTranslator_h */
