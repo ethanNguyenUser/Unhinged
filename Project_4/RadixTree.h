@@ -27,33 +27,34 @@
 template <typename ValueType>
 class RadixTree{
 public:
- RadixTree();
- ~RadixTree();
- void insert(std::string key, const ValueType& value);
- ValueType* search(std::string key) const;
+    RadixTree();
+    ~RadixTree();
+    void insert(std::string key, const ValueType& value);
+    ValueType* search(std::string key) const;
     
 private:
     struct Node{
-//        Node(std::string subKey, ValueType val, ){
-//
-//        }
+        //        Node(std::string subKey, ValueType val, ){
+        //
+        //        }
         std::string subKey;
         ValueType val;
         bool isEnd;
         Node* next[];
-
+        
     };
 };
 
 //The RadixTree constructor.
-
-RadixTree::RadixTree(){
+template <typename ValueType>
+RadixTree<ValueType>::RadixTree(){
     
 }
 
 //You may define a destructor for RadixTree if you need one to free any dynamically allocated
 //memory used by your object.
-RadixTree::~RadixTree(){
+template <typename ValueType>
+RadixTree<ValueType>::~RadixTree(){
     
 }
 
@@ -61,7 +62,8 @@ RadixTree::~RadixTree(){
 //of the passed-in value. Inserting the same item twice should simply replace the original value
 //with the new value. The insert method needs to consider a number of special cases and edge
 //conditions; here are a few to consider (this is not an exhaustive list of edge conditions).
-void RadixTree::insert(std::string key, const ValueType& value){
+template <typename ValueType>
+void RadixTree<ValueType>::insert(std::string key, const ValueType& value){
     
 }
 
@@ -69,7 +71,8 @@ void RadixTree::insert(std::string key, const ValueType& value){
 //is found, then the search method must return a pointer to the value associated with the key. If
 //the specified key was not found, the method must return nullptr. If this method returns a non-null
 //pointer, the caller is free to modify the value held within the Radix Tree, e.g
-ValueType* RadixTree::search(std::string key) const{
+template <typename ValueType>
+ValueType* RadixTree<ValueType>::search(std::string key) const{
     return new ValueType();
 }
 
