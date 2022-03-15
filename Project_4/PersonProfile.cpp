@@ -30,11 +30,11 @@ std::string PersonProfile::GetEmail() const{
 //no requirements on the order that you must store your attribute-value pairs.
 void PersonProfile::AddAttValPair(const AttValPair& attval){
     //if the pair is found/already exists, return
-    std::list<std::string>* values = avPairs.search(attval.attribute);
+    std::list<std::string>* values = aVPairs.search(attval.attribute);
     
-    //the vector of values for the parameter attribute exists
+    //the list of values for the parameter attribute exists
     if(values != nullptr){
-        //if the value doesn't already exist in the values vector, push back the new value into the values vector
+        //if the value doesn't already exist in the values list, push back the new value into the values list
         if(std::find(values->begin(), values->end(), attval.value) == values->end()){
             values->push_back(attval.value);
             numAVPairs++;
@@ -47,7 +47,7 @@ void PersonProfile::AddAttValPair(const AttValPair& attval){
     
     //otherwise, insert a new list
     std::list<std::string> newValues = {attval.value};
-    avPairs.insert(attval.attribute, newValues);
+    aVPairs.insert(attval.attribute, newValues);
     numAVPairs++;
     aVPairsVector.push_back(AttValPair(attval.attribute, attval.value));
 }
@@ -63,7 +63,7 @@ int PersonProfile::GetNumAttValPairs() const{
 //successfully retrieves an attribute; otherwise, it returns false and leaves attval unchanged.
 bool PersonProfile::GetAttVal(int attribute_num, AttValPair& attval) const{
     AttValPair pair = aVPairsVector[attribute_num];
-    std::list<std::string>* values = avPairs.search(pair.attribute);
+    std::list<std::string>* values = aVPairs.search(pair.attribute);
     std::list<std::string>::iterator value = std::find(values->begin(), values->end(), attval.value);
     
     //if nothing found, return false

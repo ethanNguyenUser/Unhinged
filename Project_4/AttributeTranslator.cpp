@@ -36,31 +36,44 @@ bool AttributeTranslator::Load(std::string filename){
         if(line == "")
             continue;
         int i = 0;
-        std::string sourceA = "";
-        std::string sourceV = "";
-        std::string compA = "";
-        std::string compV = "";
-
-        for(; line[i] != ','; i++)
-            sourceA += line[i];
-        i++;
-        for(; line[i] != ','; i++)
-            sourceV += line[i];
-        i++;
-        for(; line[i] != ','; i++)
-            compA += line[i];
-        i++;
-        for(; i != line.size(); i++)
-            compV += line[i];
+        std::string source = "";
+        std::string comp = "";
         
-//        if()
-//        sourceAVPairs.insert(sourceA, sourceV);
-//        sourceKeys.push_back(sourceA);
-//        
-//        compAVPairs.insert(compA, compV);
-//        compKeys.push_back(compA);
+        //build source att-val pair
+        int commaCounter = 0;
+        for(; commaCounter < 2; i++){
+            if(line[i] == ',')
+                commaCounter++;
+            source += line[i];
+        }
+        i++;
+
+        //build compatible att-val pair
+        commaCounter = 0;
+        for(; i != line.size(); i++){
+            if(line[i] == ',')
+                commaCounter++;
+            comp += line[i];
+        }
+        
+        //insert mappng of source to comp
+        
+        //the vector of values for the parameter attribute exists
+        std::vector<std::string>* comps = sourceToComp.search(source);
+        if(comps != nullptr){
+            //if the value doesn't already exist in the values vector, push back the new value into the values vector
+            if(std::find(comps->begin(), comps->end(), comp) == comps->end())
+                comps->push_back(comp);
+        }
+        //otherwise, insert a new vector
+        else{
+            std::vector<std::string> newComps = {comp};
+            sourceToComp.insert(source, newComps);
+        }
     }
     inFile.close();
+    
+    
     
     return true;
 }
@@ -72,6 +85,18 @@ bool AttributeTranslator::Load(std::string filename){
 //returned must not contain two attribute-value pairs with the same attributes and values (i.e., no
 //duplicates).
 std::vector<AttValPair> AttributeTranslator::FindCompatibleAttValPairs(const AttValPair& source) const{
-    std::vector<AttValPair> v;
-    return v;
+    std::vector<AttValPair> compPairs(0);
+
+    //if no match, return an empty vector, comps is a pointer to a vector of strings of form "compatible_attribute,compatible_value"
+    std::vector<std::string>* comps = sourceToComp.search(source.attribute);
+    if(comps == nullptr)
+        return compPairs;
+    
+    for(int i = 0; i < comps->size(); i++){
+        std::string comp = (*comps)[i];
+        size_t commaIndex = comp.find(',');
+        compPairs.push_back(AttValPair(comp.substr(0, commaIndex), comp.substr(commaIndex + 1, comp.size())));
+    }
+    
+    return compPairs;
 }

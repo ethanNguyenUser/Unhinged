@@ -55,7 +55,7 @@ public:
 private:
     std::string name;
     std::string email;
-    RadixTree<std::list<std::string>> avPairs;
+    RadixTree<std::list<std::string>> aVPairs;
     int numAVPairs;
     std::vector<AttValPair> aVPairsVector;
 };

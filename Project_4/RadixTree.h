@@ -35,10 +35,10 @@ public:
     ~RadixTree();
     void insert(std::string key, const ValueType& value);
     ValueType* search(std::string key) const;
-    void print(){
-        std::cerr << "print()" << std::endl;
-        printNodes(root, 0);
-    }
+//    void print(){
+//        std::cerr << "print()" << std::endl;
+//        printNodes(root, 0);
+//    }
     
 private:
     struct Node{
@@ -51,24 +51,24 @@ private:
         Node* next[NODE_ARRAY_SIZE] = {nullptr};
     };
     
-    void printNodes(Node* p, int depth){
-        if(p == nullptr)
-            return;
-        if(p->subKey != ""){
-            std::cerr << std::string(depth, '\t') << p->subKey << ",";
-            if(p->isEnd)
-                std::cerr << p->val;
-            else
-                std::cerr << "*";
-            std::cerr << std::endl;
-        }
-        for(int i = 0; i < NODE_ARRAY_SIZE; i++){
-            if(p->next[i] != nullptr)
-                printNodes(p->next[i], depth + 1);
-        }
-    }
+//    void printNodes(Node* p, int depth){
+//        if(p == nullptr)
+//            return;
+//        if(p->subKey != ""){
+//            std::cerr << std::string(depth, '\t') << p->subKey << ",";
+//            if(p->isEnd)
+//                std::cerr << p->val;
+//            else
+//                std::cerr << "*";
+//            std::cerr << std::endl;
+//        }
+//        for(int i = 0; i < NODE_ARRAY_SIZE; i++){
+//            if(p->next[i] != nullptr)
+//                printNodes(p->next[i], depth + 1);
+//        }
+//    }
     
-    void splitNode(Node *p, std::string key, std::string subKey, int subKeyIndex, ValueType value, int i, bool isEnd);
+    void splitNode(Node* p, const std::string& key, const std::string& subKey, const int& subKeyIndex, const ValueType& value, const int& i, bool isEnd);
     
     Node* root;
 };
@@ -125,7 +125,6 @@ void RadixTree<ValueType>::insert(std::string key, const ValueType& value){
             splitNode(p, key, p->subKey, subKeyIndex, value, i, false);
             return;
         }
-
     }
     
     //need to check when key is already contained as a subset of some element in the radix tree (e.g. insert("car") when "card" already exists)
@@ -179,7 +178,7 @@ RadixTree<ValueType>::Node::~Node(){
 }
 
 template <typename ValueType>
-void RadixTree<ValueType>::splitNode(Node *p, std::string key, std::string subKey, int subKeyIndex, ValueType value, int i, bool isEnd){
+void RadixTree<ValueType>::splitNode(Node *p, const std::string& key, const std::string& subKey, const int& subKeyIndex, const ValueType& value, const int& i, bool isEnd){
     //create new Node that will be the parent of the Nodes for our parameter key and the original Nodes already in the tree
     p->parent->next[subKey[0]] = new Node(subKey.substr(0, subKeyIndex), value, p->parent, isEnd);
     

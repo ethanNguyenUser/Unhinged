@@ -9,6 +9,7 @@
 #define AttributeTranslator_h
 
 #include <vector>
+#include <list>
 #include "provided.h"
 #include "RadixTree.h"
 
@@ -19,8 +20,8 @@
 //that all attribute lengths are less than. You may also assume that the number of
 //compatible pairs any attribute-value pair translates to is bounded by a constant (e.g., <
 //10 pairs).
-//● MUST use your RadixTree class to map source attributes to compatible attributes (for
-//full credit)
+//● MUST use your RadixTree class to map source attribute-value information to compatible
+//attribute-values (for full credit)
 //● MUST NOT use the STL map, unordered_map, multimap, or unordered_multimap types
 //● MUST NOT add any new public member functions or variables
 //● MAY use the STL list and vector classes
@@ -48,10 +49,7 @@ public:
     //duplicates).
     std::vector<AttValPair> FindCompatibleAttValPairs(const AttValPair& source) const;
 private:
-    RadixTree<std::vector<std::string>> sourceAVPairs;
-    RadixTree<std::vector<std::string>> compAVPairs;
-    std::vector<std::string> sourceKeys;
-    std::vector<std::string> compKeys;
+    RadixTree<std::vector<std::string>> sourceToComp;
 };
 
 #endif /* AttributeTranslator_h */
