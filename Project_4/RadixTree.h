@@ -9,6 +9,7 @@
 #define RadixTree_h
 
 #include <iostream>
+#include <type_traits>
 
 const int NODE_ARRAY_SIZE = 127;
 
@@ -28,6 +29,8 @@ const int NODE_ARRAY_SIZE = 127;
 //● MAY use the STL set, list and vector classes
 //● MAY have any private member functions or variables you choose to add
 
+class PersonProfile;
+
 template <typename ValueType>
 class RadixTree{
 public:
@@ -35,10 +38,10 @@ public:
     ~RadixTree();
     void insert(std::string key, const ValueType& value);
     ValueType* search(std::string key) const;
-//    void print(){
-//        std::cerr << "print()" << std::endl;
-//        printNodes(root, 0);
-//    }
+    void print(){
+        std::cerr << "print()" << std::endl;
+        printNodes(root, 0);
+    }
     
 private:
     struct Node{
@@ -51,22 +54,23 @@ private:
         Node* next[NODE_ARRAY_SIZE] = {nullptr};
     };
     
-//    void printNodes(Node* p, int depth){
-//        if(p == nullptr)
-//            return;
-//        if(p->subKey != ""){
-//            std::cerr << std::string(depth, '\t') << p->subKey << ",";
-//            if(p->isEnd)
+    void printNodes(Node* p, int depth){
+        if(p == nullptr)
+            return;
+        if(p->subKey != ""){
+            std::cerr << std::string(depth, '\t') << p->subKey << "||";
+            if(p->isEnd)
 //                std::cerr << p->val;
-//            else
-//                std::cerr << "*";
-//            std::cerr << std::endl;
-//        }
-//        for(int i = 0; i < NODE_ARRAY_SIZE; i++){
-//            if(p->next[i] != nullptr)
-//                printNodes(p->next[i], depth + 1);
-//        }
-//    }
+                std::cerr << "vector";
+            else
+                std::cerr << "*";
+            std::cerr << std::endl;
+        }
+        for(int i = 0; i < NODE_ARRAY_SIZE; i++){
+            if(p->next[i] != nullptr)
+                printNodes(p->next[i], depth + 1);
+        }
+    }
     
     void splitNode(Node* p, const std::string& key, const std::string& subKey, const int& subKeyIndex, const ValueType& value, const int& i, bool isEnd);
     
@@ -171,6 +175,10 @@ RadixTree<ValueType>::Node::Node(std::string subKey, ValueType val, Node* parent
 
 template <typename ValueType>
 RadixTree<ValueType>::Node::~Node(){
+//    if(std::is_pointer<ValueType>::value){
+//        delete val;
+//    }
+
     for(int i = 0; i < NODE_ARRAY_SIZE; i++){
         if(next[i] != nullptr)
             delete next[i];

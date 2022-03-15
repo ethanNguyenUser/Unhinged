@@ -41,9 +41,11 @@ bool AttributeTranslator::Load(std::string filename){
         
         //build source att-val pair
         int commaCounter = 0;
-        for(; commaCounter < 2; i++){
+        for(;; i++){
             if(line[i] == ',')
                 commaCounter++;
+            if(commaCounter == 2)
+                break;
             source += line[i];
         }
         i++;
@@ -56,15 +58,21 @@ bool AttributeTranslator::Load(std::string filename){
             comp += line[i];
         }
         
-        //insert mappng of source to comp
+        //for testing
+//        std::cerr << source << "|" << comp << std::endl;
         
-        //the vector of values for the parameter attribute exists
+        //insert mappng of source to comp
         std::vector<std::string>* comps = sourceToComp.search(source);
+        
+        //if the vector of comps exists already for a particular source
         if(comps != nullptr){
-            //if the value doesn't already exist in the values vector, push back the new value into the values vector
+            //if the comp doesn't already exist in the comps vector, push back the new value into the values vector
             if(std::find(comps->begin(), comps->end(), comp) == comps->end())
                 comps->push_back(comp);
+            
+            //otherwise, the comp exists already, so don't do anything
         }
+        
         //otherwise, insert a new vector
         else{
             std::vector<std::string> newComps = {comp};
@@ -73,7 +81,8 @@ bool AttributeTranslator::Load(std::string filename){
     }
     inFile.close();
     
-    
+    //for testing
+//    sourceToComp.print();
     
     return true;
 }
@@ -88,14 +97,15 @@ std::vector<AttValPair> AttributeTranslator::FindCompatibleAttValPairs(const Att
     std::vector<AttValPair> compPairs(0);
 
     //if no match, return an empty vector, comps is a pointer to a vector of strings of form "compatible_attribute,compatible_value"
-    std::vector<std::string>* comps = sourceToComp.search(source.attribute);
+    std::vector<std::string>* comps = sourceToComp.search(source.attribute + "," + source.value);
+
     if(comps == nullptr)
         return compPairs;
     
     for(int i = 0; i < comps->size(); i++){
         std::string comp = (*comps)[i];
         size_t commaIndex = comp.find(',');
-        compPairs.push_back(AttValPair(comp.substr(0, commaIndex), comp.substr(commaIndex + 1, comp.size())));
+        compPairs.push_back(AttValPair(comp.substr(0, commaIndex), comp.substr(commaIndex + 1)));
     }
     
     return compPairs;
