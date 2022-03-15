@@ -42,7 +42,7 @@ public:
     
 private:
     struct Node{
-        Node(std::string subKey, ValueType val) : subKey(subKey), val(val), isEnd(true){
+        Node(std::string subKey, ValueType val, Node* parent = nullptr, bool isEnd = true) : subKey(subKey), val(val), isEnd(isEnd), parent(parent){
         }
         ~Node(){
             for(int i = 0; i < NODE_ARRAY_SIZE; i++){
@@ -53,6 +53,7 @@ private:
         std::string subKey;
         ValueType val;
         bool isEnd;
+        Node* parent;
         Node* next[NODE_ARRAY_SIZE] = {nullptr};
     };
     
@@ -63,6 +64,8 @@ private:
             std::cerr << std::string(depth, '\t') << p->subKey << ",";
             if(p->isEnd)
                 std::cerr << p->val;
+            else
+                std::cerr << "*";
             std::cerr << std::endl;
         }
         for(int i = 0; i < NODE_ARRAY_SIZE; i++){
@@ -71,22 +74,34 @@ private:
         }
     }
     
-    bool keyMatchesSubKey(std::string key, std::string sub);
+    void splitNode(Node *p, std::string key, std::string subKey, int subKeyIndex, ValueType value, int i, bool isEnd);
+    
     Node* root;
 };
 
-//returns whether sub matches with first part of key
 template <typename ValueType>
-bool RadixTree<ValueType>::keyMatchesSubKey(std::string key, std::string sub){
-    if(sub.length() < key.length())
-        return false;
-    return key.substr(sub.length()) == sub;
-}
+void RadixTree<ValueType>::splitNode(Node *p, std::string key, std::string subKey, int subKeyIndex, ValueType value, int i, bool isEnd){
+    //create new Node that will be the parent of the Nodes for our parameter key and the original Nodes already in the tree
+    p->parent->next[subKey[0]] = new Node(subKey.substr(0, subKeyIndex), value, p->parent, isEnd);
+    
+    Node* newNode = p->parent->next[subKey[0]];
 
+    //update p, which is the parent of all the original Nodes that collide with the parameter key
+    p->parent = newNode;
+    p->subKey = subKey.substr(subKeyIndex);
+
+    //add to the new Node the Node for our parameter key
+    std::string newSubkey = key.substr(i);
+    newNode->next[newSubkey[0]] = new Node(newSubkey, value, newNode);
+
+    //have newNode point to p, which was from the original tree
+    newNode->next[p->subKey[0]] = p;
+}
 
 //The RadixTree constructor.
 template <typename ValueType>
 RadixTree<ValueType>::RadixTree(){
+    //create a dummy head node
     root = new Node("", 0);
     root->isEnd = false;
 }
@@ -103,63 +118,50 @@ RadixTree<ValueType>::~RadixTree(){
 //with the new value.
 template <typename ValueType>
 void RadixTree<ValueType>::insert(std::string key, const ValueType& value){
-    //no elements initially
-//    if(root == nullptr){
-//        root = new Node(key, value);
-//        return;
-//    }
-    
     //loop through each character in the key
     Node* p = root;
     int i = 0;
     int subKeyIndex = 0;
     for(; i < key.size(); i++){
         char c = key[i];
-        
+
         //if the subKeyIndex is greater than or equal to the length of the subKey for the Node p, that means the key goes past this current Node
         if(p->subKey.size() <= subKeyIndex){
             //if the key's next character doesn't exist in the p's next array, create a new Node
             if(p->next[c] == nullptr){
-                p->next[c] = new Node(key.substr(i), value);
+                p->next[c] = new Node(key.substr(i), value, p);
                 return;
             }
+            
             //otherwise, the RadixTree still has more Nodes that may match part of or all of the key, so set it to it's next Node that correspond to what is in the key
             else{
                 p = p->next[c];
             }
             subKeyIndex = 0;
         }
-        
+
         //if the subKey character matches the key character, increment the subKeyIndex
         if(c == p->subKey[subKeyIndex]){
             subKeyIndex++;
         }
-        //the key's character doesn't match what we have in the Node, so we need to create two new Nodes by splitting up the current Node
+        
+        //the key's character doesn't match what we have in the Node, so we need to create two new Nodes by splitting up the current Node, key could be shorter or longer than subkey
         else{
-            p->isEnd = false;
-            //from original
-            std::string nextSubKey = p->subKey.substr(subKeyIndex);
-            p->subKey = p->subKey.substr(0, subKeyIndex);
-            
-            //from new key
-            p->next[c] = new Node(key.substr(i), value);
-            
-            //from original
-            p->next[nextSubKey[0]] = new Node(nextSubKey, p->val);
-//            Node* temp = p->next[nextSubKey[0]];
-//            temp->next = nullptr;
-            
+            splitNode(p, key, p->subKey, subKeyIndex, value, i, false);
             return;
         }
-        
+
     }
-    //need to check when key is already contained as a subset of some element in the radix tree (e.g. car in card)
-    if(subKeyIndex >= p->subKey.size())
-        p->isEnd = true;
+    
+    //need to check when key is already contained as a subset of some element in the radix tree (e.g. insert("car") when "card" already exists)
+    if(subKeyIndex < p->subKey.size()){
+        splitNode(p, key, p->subKey, subKeyIndex, value, i, true);
+        return;
+    }
 
     //if we looped through the entire key's characters without returning, we have a duplicate key, so set the value
     p->val = value;
-    
+    p->isEnd = true;
 }
 
 //The search method is responsible for searching your Radix Tree for the specified key. If the key

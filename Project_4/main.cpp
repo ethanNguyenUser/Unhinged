@@ -33,7 +33,7 @@ int main() {
 //
 //    std::cout << "Happy dating!" << std::endl;
     
-    RadixTree<int> r;
+//    RadixTree<int> r;
 //    r.insert("hi", 1);
 //    r.insert("hi", 2);
 //    r.insert("hit", 3);
@@ -43,19 +43,37 @@ int main() {
 //    r.insert("hilts", 7);
 //    r.insert("hilts", 8);
 //    r.print();
-
-    RadixTree<int> t;
-    t.insert("card", 1);
-//    t.insert("carry", -1);
+//
+//    RadixTree<int> t;
+//    t.insert("crown", 1);
+//    t.insert("car", -1);
 //    t.insert("carbs", -2);
-    t.insert("coin", 2);
-    t.insert("cash", 3);
-    t.insert("coin", 4);
-    t.insert("bash", 5);
-    t.insert("cause", 6);
-    t.insert("cause", 7);
-    t.insert("car", 8);
-    t.print();
+//    t.insert("coin", 2);
+//    t.insert("cash", 3);
+//    t.insert("coin", 4);
+//    t.insert("bash", 5);
+//    t.insert("cause", 6);
+//    t.insert("cause", 7);
+//    t.insert("crab", 8);
+//    t.insert("crepe", 8);
+//    t.insert("cr", 8);
+//    t.print();
+    
+//    RadixTree<int> s;
+//    s.insert("b", 1);
+//    s.insert("b", 1);
+//    s.insert("a", 2);
+//    s.insert("*", 3);
+//    s.insert("abacus", 4);
+//    s.insert("aba", 5);
+//    s.insert("ab", 6);
+//    s.insert("aa", 7);
+//    s.insert("aP", 8);
+//    s.insert("a", 9);
+//    s.insert("abort", 10);
+//    s.insert("aboriginal", 11);
+//
+//    s.print();
 
 }
 
