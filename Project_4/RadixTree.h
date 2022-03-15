@@ -28,8 +28,6 @@ const int NODE_ARRAY_SIZE = 127;
 //● MAY use the STL set, list and vector classes
 //● MAY have any private member functions or variables you choose to add
 
-class PersonProfile;
-
 template <typename ValueType>
 class RadixTree{
 public:
@@ -64,9 +62,15 @@ private:
             return;
         if(p->subKey != ""){
             std::cerr << std::string(depth, '\t') << p->subKey << "||";
-            if(p->isEnd)
-                std::cerr << p->val;
-//                std::cerr << "vector";
+            if(p->isEnd){
+//                std::cerr << p->val;
+                
+//                for(int i = 0; i < p->val.size(); i++){
+//                    std::cerr << p->val[i] << "|";
+//                }
+                
+                std::cerr << p->val.GetName();
+            }
             else
                 std::cerr << "*";
             std::cerr << std::endl;

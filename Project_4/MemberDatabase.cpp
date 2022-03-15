@@ -13,11 +13,7 @@ MemberDatabase::MemberDatabase(){}
 
 //You may define a destructor for MemberDatabase if you need one to free any dynamically
 //allocated memory used by your object.
-MemberDatabase::~MemberDatabase(){
-    for(int i = 0; i < profiles.size(); i++){
-        delete profiles[i];
-    }
-}
+MemberDatabase::~MemberDatabase(){}
 
 //Person 1’s name
 //Person 1’s email address
@@ -89,44 +85,60 @@ bool MemberDatabase::LoadDatabase(std::string filename){
         
         //extract name information
         if(line == ""){
-            PersonProfile* person = new PersonProfile(name, email);
+            PersonProfile person = PersonProfile(name, email);
             
             //insert emailToProfiles
 
-            PersonProfile** p = emailToProfile.search(email);
+            PersonProfile* profile = emailToProfile.search(email);
             
-            //if this person already exists, delete them and return false
-            if(p != nullptr){
-                delete person;
+            //if this person already exists, return false
+            if(profile != nullptr)
                 return false;
-            }
             
             //otherwise, person doesn't exist already, so insert into RadixTree and push into profiles vector
-            emailToProfile.insert(email, *p);
-            profiles.push_back(person);
+            emailToProfile.insert(email, person);
                                 
             for(int i = 0; i < attValPairsString.size(); i++){
                 std::string aVPair = attValPairsString[i];
-                person->AddAttValPair(AttValPair(line.substr(0, aVPair.find(',')), aVPair.substr(line.find(',') + 1)));
+                person.AddAttValPair(AttValPair(line.substr(0, aVPair.find(',')), aVPair.substr(line.find(',') + 1)));
                 
                 //insert aVPairToEmails
                 
                 std::vector<std::string>* emails = aVPairToEmails.search(aVPair);
                 //if there are already emails for this particular att-val pair, add email
-                if(emails != nullptr)
-                    emails->push_back(email);
+                if(emails != nullptr){
+                    bool hasDuplicateEmail = false;
+                    for(int i = 0; i < email.size(); i++){
+                        if((*emails)[i] == email){
+                            hasDuplicateEmail = true;
+                            break;
+                        }
+                            
+                    }
+                    if(!hasDuplicateEmail)
+                        emails->push_back(email);
+                }
                 
                 //otherwise, there aren't any emails for this particular pair, so add a new vector
                 else{
                     std::vector newEmails = {email};
-                    *emails = {email};
+                    aVPairToEmails.insert(aVPair, newEmails);
                 }
                 
             }
-    
+
+            name = "";
+            email = "";
+            attValPairsString = {};
             isAttValPair = false;
+            isName = true;
         }
     }
+    
+    //for testing
+//    aVPairToEmails.print();
+//    emailToProfile.print();
+    
     inFile.close();
     return true;
 }
