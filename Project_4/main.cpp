@@ -33,47 +33,77 @@ int main() {
 //
 //    std::cout << "Happy dating!" << std::endl;
     
-//    RadixTree<int> r;
-//    r.insert("hi", 1);
-//    r.insert("hi", 2);
-//    r.insert("hit", 3);
-//    r.insert("hill", 4);
-//    r.insert("hilt", 5);
-//    r.insert("hills", 6);
-//    r.insert("hilts", 7);
-//    r.insert("hilts", 8);
-//    r.print();
-//
-//    RadixTree<int> t;
-//    t.insert("crown", 1);
-//    t.insert("car", -1);
-//    t.insert("carbs", -2);
-//    t.insert("coin", 2);
-//    t.insert("cash", 3);
-//    t.insert("coin", 4);
-//    t.insert("bash", 5);
-//    t.insert("cause", 6);
-//    t.insert("cause", 7);
-//    t.insert("crab", 8);
-//    t.insert("crepe", 8);
-//    t.insert("cr", 8);
-//    t.print();
+    RadixTree<int> r;
+    r.insert("hi", 1);
+    r.insert("hi", 2);
+    r.insert("hit", 3);
+    r.insert("hill", 4);
+    r.insert("hilt", 5);
+    r.insert("hills", 6);
+    r.insert("hilts", 7);
+    r.insert("hilts", 8);
+    r.print();
+    assert(*(r.search("hi")) == 2);
+    assert(*(r.search("hit")) == 3);
+    assert(*(r.search("hill")) == 4);
+    assert(*(r.search("hilt")) == 5);
+    assert(*(r.search("hills")) == 6);
+    assert(*(r.search("hilts")) == 8);
+
+
+    RadixTree<int> t;
+    t.insert("crown", 1);
+    t.insert("car", -1);
+    t.insert("carbs", -2);
+    t.insert("coin", 2);
+    t.insert("cash", 3);
+    t.insert("coin", 4);
+    t.insert("bash", 5);
+    t.insert("cause", 6);
+    t.insert("cause", 7);
+    t.insert("crab", 8);
+    t.insert("crepe", 8);
+    t.insert("cr", 8);
+    t.print();
     
-//    RadixTree<int> s;
-//    s.insert("b", 1);
-//    s.insert("b", 1);
-//    s.insert("a", 2);
-//    s.insert("*", 3);
-//    s.insert("abacus", 4);
-//    s.insert("aba", 5);
-//    s.insert("ab", 6);
-//    s.insert("aa", 7);
-//    s.insert("aP", 8);
-//    s.insert("a", 9);
-//    s.insert("abort", 10);
-//    s.insert("aboriginal", 11);
-//
-//    s.print();
+    assert(*(t.search("crown")) == 1);
+    assert(*(t.search("car")) == -1);
+    assert(*(t.search("carbs")) == -2);
+    assert(*(t.search("cash")) == 3);
+    assert(*(t.search("coin")) == 4);
+    assert(*(t.search("bash")) == 5);
+    assert(*(t.search("cause")) == 7);
+    assert(*(t.search("crab")) == 8);
+    assert(*(t.search("crepe")) == 8);
+    assert(*(t.search("cr")) == 8);
+    
+    RadixTree<int> s;
+    s.insert("b", 0);
+    s.insert("b", 1);
+    s.insert("a", 2);
+    s.insert("*", 3);
+    s.insert("abacus", 4);
+    s.insert("aba", 5);
+    s.insert("ab", 6);
+    s.insert("aa", 7);
+    s.insert("aP", 8);
+    s.insert("a", 9);
+    s.insert("abort", 10);
+    s.insert("aboriginal", 11);
+
+    s.print();
+    
+    assert(*(s.search("b")) == 1);
+    assert(*(s.search("*")) == 3);
+    assert(*(s.search("abacus")) == 4);
+    assert(*(s.search("aba")) == 5);
+    assert(*(s.search("ab")) == 6);
+    assert(*(s.search("aa")) == 7);
+    assert(*(s.search("aP")) == 8);
+    assert(*(s.search("a")) == 9);
+    assert(*(s.search("abort")) == 10);
+    assert(*(s.search("aboriginal")) == 11);
+
 
 }
 

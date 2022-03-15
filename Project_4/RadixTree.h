@@ -170,13 +170,55 @@ void RadixTree<ValueType>::insert(std::string key, const ValueType& value){
 //pointer, the caller is free to modify the value held within the Radix Tree, e.g
 template <typename ValueType>
 ValueType* RadixTree<ValueType>::search(std::string key) const{
+//    Node* p = root;
+//    int subKeyIndex = 0;
+//    for(int i = 0; i < key.size(); i++){
+//        char c = key[i];
+//
+//        //if the subKeyIndex is greater than or equal to the length of the subKey for the Node p, that means the key goes past this current Node
+//        if(p->subKey.size() <= subKeyIndex){
+//            //if the key's next character doesn't exist in the p's next array, end search
+//            if(p->isEnd){
+//                //if the key is smaller than the key in the tree
+//                if(p->subKey.size() < subKeyIndex)
+//                    return nullptr;
+//
+//                //otherwise, we have a match, so return the address to the value
+//                return &p->val;
+//            }
+//
+//            //otherwise, the RadixTree still has more Nodes that may match part of or all of the key, so set it to it's next Node that correspond to what is in the key
+//            else{
+//                p = p->next[c];
+//            }
+//            subKeyIndex = 0;
+//        }
+//
+//        if(c == p->subKey[subKeyIndex]){
+//            subKeyIndex++;
+//        }
+//
+//        //the key's character doesn't match what we have in the Node, so return nullptr
+//        else{
+//            return nullptr;
+//        }
+//    }
     Node* p = root;
+    p = p->next[key[0]];
+    std::string subKey = "";
     while(true){
-        if(p->isEnd && p->val == key){
+        subKey += p->subKey;
+        if(p->isEnd && subKey == key)
+            return &p->val;
+        //key goes past subKey, so keep searching
+        if(key.size() > subKey.size())
+            p = p->next[key[subKey.size()]];
+        else
             break;
-        }
     }
-    return new ValueType();
+    
+    //reached end of search, return nullptr
+    return nullptr;
 }
 
 #endif /* RadixTree_h */
