@@ -31,7 +31,18 @@ int main() {
 //    while (findMatches(mdb, at))
 //        ;
 //
-//    std::cout << "Happy dating!" << std::endl;
+    std::cout << "Happy dating!" << std::endl;
+    
+    
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    ///MemberDatabase Tests
+    ///////////////////////////////////////////////////////////////////////////////
+    
+//    std::vector<std::string> v = mdb.FindMatchingMembers(AttValPair("hobby", "canyoneering"));
+//    for(int i = 0; i < v.size(); i++){
+//        std::cerr << v[i] << std::endl;
+//    }
     
     ///////////////////////////////////////////////////////////////////////////////
     ///AttributeTranslator Tests

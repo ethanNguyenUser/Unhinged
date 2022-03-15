@@ -51,7 +51,12 @@ bool MemberDatabase::LoadDatabase(std::string filename){
     std::string email = "";
     std::vector<std::string> attValPairsString = {};
     
-    while (getline(inFile, line)){
+    while (true){
+        if(!getline(inFile, line)){
+            addPerson(line, name, email, attValPairsString, isAttValPair, isName);
+            break;
+        }
+        
         //extract name information
         if(isName){
             name = line;
@@ -83,56 +88,8 @@ bool MemberDatabase::LoadDatabase(std::string filename){
             continue;
         }
         
-        //extract name information
-        if(line == ""){
-            PersonProfile person = PersonProfile(name, email);
-            
-            //insert emailToProfiles
-
-            PersonProfile* profile = emailToProfile.search(email);
-            
-            //if this person already exists, return false
-            if(profile != nullptr)
-                return false;
-            
-            //otherwise, person doesn't exist already, so insert into RadixTree and push into profiles vector
-            emailToProfile.insert(email, person);
-                                
-            for(int i = 0; i < attValPairsString.size(); i++){
-                std::string aVPair = attValPairsString[i];
-                person.AddAttValPair(AttValPair(line.substr(0, aVPair.find(',')), aVPair.substr(line.find(',') + 1)));
-                
-                //insert aVPairToEmails
-                
-                std::vector<std::string>* emails = aVPairToEmails.search(aVPair);
-                //if there are already emails for this particular att-val pair, add email
-                if(emails != nullptr){
-                    bool hasDuplicateEmail = false;
-                    for(int i = 0; i < email.size(); i++){
-                        if((*emails)[i] == email){
-                            hasDuplicateEmail = true;
-                            break;
-                        }
-                            
-                    }
-                    if(!hasDuplicateEmail)
-                        emails->push_back(email);
-                }
-                
-                //otherwise, there aren't any emails for this particular pair, so add a new vector
-                else{
-                    std::vector newEmails = {email};
-                    aVPairToEmails.insert(aVPair, newEmails);
-                }
-                
-            }
-
-            name = "";
-            email = "";
-            attValPairsString = {};
-            isAttValPair = false;
-            isName = true;
-        }
+        if(line == "")
+            addPerson(line, name, email, attValPairsString, isAttValPair, isName);
     }
     
     //for testing
@@ -149,9 +106,17 @@ bool MemberDatabase::LoadDatabase(std::string filename){
 //empty. There is no particular order required for the email addresses in the vector returned. The
 //vector returned must not contain duplicate email addresses.
 std::vector<std::string> MemberDatabase::FindMatchingMembers(const AttValPair& input) const{
-    //TODO: Stub
-    std::vector<std::string> v;
-    return v;
+    std::vector<std::string>* emailsPointer = aVPairToEmails.search(input.attribute + "," + input.value);
+    std::vector<std::string> emails = {};
+    if(emailsPointer == nullptr){
+        return emails;
+    }
+    
+    for(int i = 0; i < emailsPointer->size(); i++){
+        emails.push_back((*emailsPointer)[i]);
+    }
+    
+    return emails;
 }
 
 //Given an email address, this method must determine if a member exists in the database with
@@ -160,4 +125,56 @@ std::vector<std::string> MemberDatabase::FindMatchingMembers(const AttValPair& i
 const PersonProfile* MemberDatabase::GetMemberByEmail(std::string email) const{
     //TODO: Stub
     return new PersonProfile("", "");
+}
+
+//create new profile and add to data structures
+bool MemberDatabase::addPerson(const std::string& line, std::string& name, std::string& email, std::vector<std::string>& attValPairsString, bool& isAttValPair, bool& isName){
+    PersonProfile person = PersonProfile(name, email);
+    
+    //insert emailToProfiles
+    
+    PersonProfile* profile = emailToProfile.search(email);
+    
+    //if this person already exists, return false
+    if(profile != nullptr)
+        return false;
+    
+    //otherwise, person doesn't exist already, so insert into RadixTree and push into profiles vector
+    emailToProfile.insert(email, person);
+    
+    for(int i = 0; i < attValPairsString.size(); i++){
+        std::string aVPair = attValPairsString[i];
+        person.AddAttValPair(AttValPair(line.substr(0, aVPair.find(',')), aVPair.substr(line.find(',') + 1)));
+        
+        //insert aVPairToEmails
+        
+        std::vector<std::string>* emails = aVPairToEmails.search(aVPair);
+        //if there are already emails for this particular att-val pair, add email
+        if(emails != nullptr){
+            bool hasDuplicateEmail = false;
+            for(int i = 0; i < email.size(); i++){
+                if((*emails)[i] == email){
+                    hasDuplicateEmail = true;
+                    break;
+                }
+                
+            }
+            if(!hasDuplicateEmail)
+                emails->push_back(email);
+        }
+        
+        //otherwise, there aren't any emails for this particular pair, so add a new vector
+        else{
+            std::vector newEmails = {email};
+            aVPairToEmails.insert(aVPair, newEmails);
+        }
+        
+    }
+    
+    name = "";
+    email = "";
+    attValPairsString = {};
+    isAttValPair = false;
+    isName = true;
+    return true;
 }
