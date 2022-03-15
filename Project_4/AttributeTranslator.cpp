@@ -62,20 +62,15 @@ bool AttributeTranslator::Load(std::string filename){
 //        std::cerr << source << "|" << comp << std::endl;
         
         //insert mappng of source to comp
-        std::vector<std::string>* comps = sourceToComp.search(source);
+        std::unordered_set<std::string>* comps = sourceToComp.search(source);
         
-        //if the vector of comps exists already for a particular source
-        if(comps != nullptr){
-            //if the comp doesn't already exist in the comps vector, push back the new value into the values vector
-            if(std::find(comps->begin(), comps->end(), comp) == comps->end())
-                comps->push_back(comp);
-            
-            //otherwise, the comp exists already, so don't do anything
-        }
-        
+        //if the vector of comps exists already for a particular source, insert into the unordered_set the comp
+        if(comps != nullptr)
+            comps->insert(comp);
+    
         //otherwise, insert a new vector
         else{
-            std::vector<std::string> newComps = {comp};
+            std::unordered_set<std::string> newComps = {comp};
             sourceToComp.insert(source, newComps);
         }
     }
@@ -83,7 +78,7 @@ bool AttributeTranslator::Load(std::string filename){
     
     //for testing
 //    sourceToComp.print();
-    
+
     return true;
 }
 
@@ -97,13 +92,13 @@ std::vector<AttValPair> AttributeTranslator::FindCompatibleAttValPairs(const Att
     std::vector<AttValPair> compPairs(0);
 
     //if no match, return an empty vector, comps is a pointer to a vector of strings of form "compatible_attribute,compatible_value"
-    std::vector<std::string>* comps = sourceToComp.search(source.attribute + "," + source.value);
+    std::unordered_set<std::string>* comps = sourceToComp.search(source.attribute + "," + source.value);
 
     if(comps == nullptr)
         return compPairs;
     
-    for(int i = 0; i < comps->size(); i++){
-        std::string comp = (*comps)[i];
+    for(std::unordered_set<std::string>::iterator it = comps->begin(); it != comps->end(); it++){
+        std::string comp = *it;
         size_t commaIndex = comp.find(',');
         compPairs.push_back(AttValPair(comp.substr(0, commaIndex), comp.substr(commaIndex + 1)));
     }

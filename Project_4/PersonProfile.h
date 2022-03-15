@@ -10,7 +10,7 @@
 
 #include "provided.h"
 #include <vector>
-#include <list>
+#include <unordered_set>
 #include "RadixTree.h"
 
 //●MUST be able to add and retrieve attribute-value pairs in better than O(N) time where N
@@ -55,7 +55,7 @@ public:
 private:
     std::string name;
     std::string email;
-    RadixTree<std::list<std::string>> aVPairs;
+    RadixTree<std::unordered_set<std::string>> aVPairs;
     int numAVPairs;
     std::vector<AttValPair> aVPairsVector;
 };

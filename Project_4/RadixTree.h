@@ -9,7 +9,6 @@
 #define RadixTree_h
 
 #include <iostream>
-#include <type_traits>
 
 const int NODE_ARRAY_SIZE = 127;
 
@@ -175,10 +174,6 @@ RadixTree<ValueType>::Node::Node(std::string subKey, ValueType val, Node* parent
 
 template <typename ValueType>
 RadixTree<ValueType>::Node::~Node(){
-//    if(std::is_pointer<ValueType>::value){
-//        delete val;
-//    }
-
     for(int i = 0; i < NODE_ARRAY_SIZE; i++){
         if(next[i] != nullptr)
             delete next[i];

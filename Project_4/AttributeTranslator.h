@@ -9,7 +9,7 @@
 #define AttributeTranslator_h
 
 #include <vector>
-#include <list>
+#include <unordered_set>
 #include "provided.h"
 #include "RadixTree.h"
 
@@ -49,7 +49,7 @@ public:
     //duplicates).
     std::vector<AttValPair> FindCompatibleAttValPairs(const AttValPair& source) const;
 private:
-    RadixTree<std::vector<std::string>> sourceToComp;
+    RadixTree<std::unordered_set<std::string>> sourceToComp;
 };
 
 #endif /* AttributeTranslator_h */
