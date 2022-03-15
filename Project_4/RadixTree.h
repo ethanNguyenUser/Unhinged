@@ -42,14 +42,8 @@ public:
     
 private:
     struct Node{
-        Node(std::string subKey, ValueType val, Node* parent = nullptr, bool isEnd = true) : subKey(subKey), val(val), isEnd(isEnd), parent(parent){
-        }
-        ~Node(){
-            for(int i = 0; i < NODE_ARRAY_SIZE; i++){
-                if(next[i] != nullptr)
-                    delete next[i];
-            }
-        }
+        Node(std::string subKey, ValueType val, Node* parent = nullptr, bool isEnd = true);
+        ~Node();
         std::string subKey;
         ValueType val;
         bool isEnd;
@@ -78,25 +72,6 @@ private:
     
     Node* root;
 };
-
-template <typename ValueType>
-void RadixTree<ValueType>::splitNode(Node *p, std::string key, std::string subKey, int subKeyIndex, ValueType value, int i, bool isEnd){
-    //create new Node that will be the parent of the Nodes for our parameter key and the original Nodes already in the tree
-    p->parent->next[subKey[0]] = new Node(subKey.substr(0, subKeyIndex), value, p->parent, isEnd);
-    
-    Node* newNode = p->parent->next[subKey[0]];
-
-    //update p, which is the parent of all the original Nodes that collide with the parameter key
-    p->parent = newNode;
-    p->subKey = subKey.substr(subKeyIndex);
-
-    //add to the new Node the Node for our parameter key
-    std::string newSubkey = key.substr(i);
-    newNode->next[newSubkey[0]] = new Node(newSubkey, value, newNode);
-
-    //have newNode point to p, which was from the original tree
-    newNode->next[p->subKey[0]] = p;
-}
 
 //The RadixTree constructor.
 template <typename ValueType>
@@ -170,46 +145,17 @@ void RadixTree<ValueType>::insert(std::string key, const ValueType& value){
 //pointer, the caller is free to modify the value held within the Radix Tree, e.g
 template <typename ValueType>
 ValueType* RadixTree<ValueType>::search(std::string key) const{
-//    Node* p = root;
-//    int subKeyIndex = 0;
-//    for(int i = 0; i < key.size(); i++){
-//        char c = key[i];
-//
-//        //if the subKeyIndex is greater than or equal to the length of the subKey for the Node p, that means the key goes past this current Node
-//        if(p->subKey.size() <= subKeyIndex){
-//            //if the key's next character doesn't exist in the p's next array, end search
-//            if(p->isEnd){
-//                //if the key is smaller than the key in the tree
-//                if(p->subKey.size() < subKeyIndex)
-//                    return nullptr;
-//
-//                //otherwise, we have a match, so return the address to the value
-//                return &p->val;
-//            }
-//
-//            //otherwise, the RadixTree still has more Nodes that may match part of or all of the key, so set it to it's next Node that correspond to what is in the key
-//            else{
-//                p = p->next[c];
-//            }
-//            subKeyIndex = 0;
-//        }
-//
-//        if(c == p->subKey[subKeyIndex]){
-//            subKeyIndex++;
-//        }
-//
-//        //the key's character doesn't match what we have in the Node, so return nullptr
-//        else{
-//            return nullptr;
-//        }
-//    }
     Node* p = root;
     p = p->next[key[0]];
     std::string subKey = "";
     while(true){
+        if(p == nullptr)
+            break;
+        
         subKey += p->subKey;
         if(p->isEnd && subKey == key)
             return &p->val;
+        
         //key goes past subKey, so keep searching
         if(key.size() > subKey.size())
             p = p->next[key[subKey.size()]];
@@ -219,6 +165,36 @@ ValueType* RadixTree<ValueType>::search(std::string key) const{
     
     //reached end of search, return nullptr
     return nullptr;
+}
+
+template <typename ValueType>
+RadixTree<ValueType>::Node::Node(std::string subKey, ValueType val, Node* parent, bool isEnd) : subKey(subKey), val(val), isEnd(isEnd), parent(parent){}
+
+template <typename ValueType>
+RadixTree<ValueType>::Node::~Node(){
+    for(int i = 0; i < NODE_ARRAY_SIZE; i++){
+        if(next[i] != nullptr)
+            delete next[i];
+    }
+}
+
+template <typename ValueType>
+void RadixTree<ValueType>::splitNode(Node *p, std::string key, std::string subKey, int subKeyIndex, ValueType value, int i, bool isEnd){
+    //create new Node that will be the parent of the Nodes for our parameter key and the original Nodes already in the tree
+    p->parent->next[subKey[0]] = new Node(subKey.substr(0, subKeyIndex), value, p->parent, isEnd);
+    
+    Node* newNode = p->parent->next[subKey[0]];
+
+    //update p, which is the parent of all the original Nodes that collide with the parameter key
+    p->parent = newNode;
+    p->subKey = subKey.substr(subKeyIndex);
+
+    //add to the new Node the Node for our parameter key
+    std::string newSubkey = key.substr(i);
+    newNode->next[newSubkey[0]] = new Node(newSubkey, value, newNode);
+
+    //have newNode point to p, which was from the original tree
+    newNode->next[p->subKey[0]] = p;
 }
 
 #endif /* RadixTree_h */
