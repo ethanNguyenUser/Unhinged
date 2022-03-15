@@ -10,6 +10,7 @@
 
 #include "provided.h"
 #include <vector>
+#include <list>
 #include "RadixTree.h"
 
 //●MUST be able to add and retrieve attribute-value pairs in better than O(N) time where N
@@ -54,9 +55,9 @@ public:
 private:
     std::string name;
     std::string email;
-    RadixTree<std::string> avPairs;
+    RadixTree<std::list<std::string>> avPairs;
     int numAVPairs;
-    std::vector<std::string> attributes;
+    std::vector<AttValPair> aVPairsVector;
 };
 
 #endif /* PersonProfile_h */

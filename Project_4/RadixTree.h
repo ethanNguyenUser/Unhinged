@@ -77,7 +77,7 @@ private:
 template <typename ValueType>
 RadixTree<ValueType>::RadixTree(){
     //create a dummy head node
-    root = new Node("", 0);
+    root = new Node("", ValueType());
     root->isEnd = false;
 }
 

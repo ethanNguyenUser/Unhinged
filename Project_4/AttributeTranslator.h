@@ -12,7 +12,7 @@
 #include "provided.h"
 #include "RadixTree.h"
 
-//●MUST be able to retrieve all related attribute-value pairs for a specified source attribute-
+//● MUST be able to retrieve all related attribute-value pairs for a specified source attribute-
 //value pair in better than O(N) time where N is the number of source attribute-value pairs
 //stored in the object. So for example, O(log2 N) would be acceptable (although you can
 //do much better). For big-O analysis purposes, you may assume that there's a constant
@@ -48,8 +48,8 @@ public:
     //duplicates).
     std::vector<AttValPair> FindCompatibleAttValPairs(const AttValPair& source) const;
 private:
-    RadixTree<std::string> sourceAVPairs;
-    RadixTree<std::string> compAVPairs;
+    RadixTree<std::vector<std::string>> sourceAVPairs;
+    RadixTree<std::vector<std::string>> compAVPairs;
     std::vector<std::string> sourceKeys;
     std::vector<std::string> compKeys;
 };

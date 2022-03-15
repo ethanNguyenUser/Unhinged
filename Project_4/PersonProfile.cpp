@@ -30,11 +30,26 @@ std::string PersonProfile::GetEmail() const{
 //no requirements on the order that you must store your attribute-value pairs.
 void PersonProfile::AddAttValPair(const AttValPair& attval){
     //if the pair is found/already exists, return
-    if(avPairs.search(attval.attribute) != nullptr)
+    std::list<std::string>* values = avPairs.search(attval.attribute);
+    
+    //the vector of values for the parameter attribute exists
+    if(values != nullptr){
+        //if the value doesn't already exist in the values vector, push back the new value into the values vector
+        if(std::find(values->begin(), values->end(), attval.value) == values->end()){
+            values->push_back(attval.value);
+            numAVPairs++;
+            aVPairsVector.push_back(AttValPair(attval.attribute, attval.value));
+        }
+        
+        //prevent further exectuion
         return;
-    avPairs.insert(attval.attribute, attval.value);
+    }
+    
+    //otherwise, insert a new list
+    std::list<std::string> newValues = {attval.value};
+    avPairs.insert(attval.attribute, newValues);
     numAVPairs++;
-    attributes.push_back(attval.attribute);
+    aVPairsVector.push_back(AttValPair(attval.attribute, attval.value));
 }
 
 //This method returns the total number of distinct attribute-value pairs associated with this
@@ -47,13 +62,15 @@ int PersonProfile::GetNumAttValPairs() const{
 // < GetNumAttValPairs()) and places it in the attval parameter. The method returns true if it
 //successfully retrieves an attribute; otherwise, it returns false and leaves attval unchanged.
 bool PersonProfile::GetAttVal(int attribute_num, AttValPair& attval) const{
-    std::string* s = avPairs.search(attributes[attribute_num]);
+    AttValPair pair = aVPairsVector[attribute_num];
+    std::list<std::string>* values = avPairs.search(pair.attribute);
+    std::list<std::string>::iterator value = std::find(values->begin(), values->end(), attval.value);
     
     //if nothing found, return false
-    if(s == nullptr)
+    if(value == values->end())
         return false;
     
-    //otherwise, return an AttVallPair
-    attval = AttValPair(attributes[attribute_num], *s);
+    //otherwise, return an AttValPair
+    attval = AttValPair(pair.attribute, *value);
     return true;
 }

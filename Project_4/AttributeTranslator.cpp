@@ -32,7 +32,7 @@ bool AttributeTranslator::Load(std::string filename){
         return false;
 
     std::string line;
-    while (getline(inFile, line)) {
+    while (getline(inFile, line)){
         if(line == "")
             continue;
         int i = 0;
@@ -53,11 +53,12 @@ bool AttributeTranslator::Load(std::string filename){
         for(; i != line.size(); i++)
             compV += line[i];
         
-        sourceAVPairs.insert(sourceA, sourceV);
-        sourceKeys.push_back(sourceA);
-        
-        compAVPairs.insert(compA, compV);
-        compKeys.push_back(compA);
+//        if()
+//        sourceAVPairs.insert(sourceA, sourceV);
+//        sourceKeys.push_back(sourceA);
+//        
+//        compAVPairs.insert(compA, compV);
+//        compKeys.push_back(compA);
     }
     inFile.close();
     
