@@ -10,6 +10,9 @@
 
 #include "MemberDatabase.h"
 #include "AttributeTranslator.h"
+#include <unordered_set>
+#include <unordered_map>
+#include <algorithm>
 
 //● MUST run as efficiently as possible - we will not state any exact big-O requirements, but
 //try to make your code as efficient as possible - avoid O(N) algorithms where at all
@@ -48,6 +51,12 @@ public:
     //same number of matching attribute-value pairs, then we’d order their email addresses
     //alphabetically in the output)
     std::vector<EmailCount> IdentifyRankedMatches(std::string email, int threshold) const;
+    
+private:
+    MemberDatabase mdb;
+    AttributeTranslator at;
+    
+    static bool compareEmailCounts(EmailCount e1, EmailCount e2);
 };
 
 #endif /* MatchMaker_h */

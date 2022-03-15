@@ -6,7 +6,6 @@
 //
 
 #include "MemberDatabase.h"
-#include <fstream>
 
 //The member database constructor.
 MemberDatabase::MemberDatabase(){}
@@ -53,7 +52,7 @@ bool MemberDatabase::LoadDatabase(std::string filename){
     
     while (true){
         if(!getline(inFile, line)){
-            addPerson(line, name, email, attValPairsString, isAttValPair, isName);
+            addPerson(name, email, attValPairsString, isAttValPair, isName);
             break;
         }
         
@@ -89,7 +88,7 @@ bool MemberDatabase::LoadDatabase(std::string filename){
         }
         
         if(line == "")
-            addPerson(line, name, email, attValPairsString, isAttValPair, isName);
+            addPerson(name, email, attValPairsString, isAttValPair, isName);
     }
     
     //for testing
@@ -123,14 +122,11 @@ std::vector<std::string> MemberDatabase::FindMatchingMembers(const AttValPair& i
 //that email address, and if so, a pointer to that member’s PersonProfile that is held in your
 //MemberDatabase object; if there is no such member, this method returns nullptr.
 const PersonProfile* MemberDatabase::GetMemberByEmail(std::string email) const{
-    //TODO: Stub
-    return new PersonProfile("", "");
+    return emailToProfile.search(email);
 }
 
 //create new profile and add to data structures
-bool MemberDatabase::addPerson(const std::string& line, std::string& name, std::string& email, std::vector<std::string>& attValPairsString, bool& isAttValPair, bool& isName){
-    PersonProfile person = PersonProfile(name, email);
-    
+bool MemberDatabase::addPerson(std::string& name, std::string& email, std::vector<std::string>& attValPairsString, bool& isAttValPair, bool& isName){
     //insert emailToProfiles
     
     PersonProfile* profile = emailToProfile.search(email);
@@ -140,14 +136,15 @@ bool MemberDatabase::addPerson(const std::string& line, std::string& name, std::
         return false;
     
     //otherwise, person doesn't exist already, so insert into RadixTree and push into profiles vector
-    emailToProfile.insert(email, person);
+    emailToProfile.insert(email, PersonProfile(name, email));
     
     for(int i = 0; i < attValPairsString.size(); i++){
         std::string aVPair = attValPairsString[i];
-        person.AddAttValPair(AttValPair(line.substr(0, aVPair.find(',')), aVPair.substr(line.find(',') + 1)));
+        size_t commaIndex = aVPair.find(',');
+        std::cerr << aVPair.substr(0, commaIndex) << "," << aVPair.substr(commaIndex + 1);
+        profile->AddAttValPair(AttValPair(aVPair.substr(0, commaIndex), aVPair.substr(commaIndex + 1)));
         
         //insert aVPairToEmails
-        
         std::vector<std::string>* emails = aVPairToEmails.search(aVPair);
         //if there are already emails for this particular att-val pair, add email
         if(emails != nullptr){
@@ -159,8 +156,9 @@ bool MemberDatabase::addPerson(const std::string& line, std::string& name, std::
                 }
                 
             }
-            if(!hasDuplicateEmail)
+            if(!hasDuplicateEmail){
                 emails->push_back(email);
+            }
         }
         
         //otherwise, there aren't any emails for this particular pair, so add a new vector

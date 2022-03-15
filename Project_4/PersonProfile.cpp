@@ -34,7 +34,7 @@ void PersonProfile::AddAttValPair(const AttValPair& attval){
     
     //the unordered_set of values for the parameter attribute exists
     if(values != nullptr){
-        if((values->insert(attval.value)).second){
+        if(std::find(values->begin(), values->end(), attval.value) != values->end()){
             numAVPairs++;
             aVPairsVector.push_back(AttValPair(attval.attribute, attval.value));
         }
@@ -58,16 +58,10 @@ int PersonProfile::GetNumAttValPairs() const{
 //This method gets the attribute-value pair specified by attribute_num (where 0 <= attribute_num
 // < GetNumAttValPairs()) and places it in the attval parameter. The method returns true if it
 //successfully retrieves an attribute; otherwise, it returns false and leaves attval unchanged.
-bool PersonProfile::GetAttVal(int attribute_num, AttValPair& attval) const{
-    AttValPair pair = aVPairsVector[attribute_num];
-    std::unordered_set<std::string>* values = aVPairs.search(pair.attribute);
-    std::unordered_set<std::string>::iterator value = values->find(attval.attribute);
-    
-    //if nothing found, return false
-    if(value == values->end())
+bool PersonProfile::GetAttVal(int attribute_num, AttValPair& attval) const{    
+    if(attribute_num < 0 || attribute_num >= numAVPairs)
         return false;
     
-    //otherwise, return an AttValPair
-    attval = AttValPair(pair.attribute, *value);
+    attval = aVPairsVector[attribute_num];
     return true;
 }

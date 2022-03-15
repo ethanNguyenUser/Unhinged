@@ -56,6 +56,7 @@ private:
     std::string name;
     std::string email;
     RadixTree<std::unordered_set<std::string>> aVPairs;
+//    RadixTree<std::vector<std::string>> aVPairs;
     int numAVPairs;
     std::vector<AttValPair> aVPairsVector;
 };

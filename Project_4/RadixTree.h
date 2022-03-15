@@ -35,7 +35,7 @@ public:
     ~RadixTree();
     void insert(std::string key, const ValueType& value);
     ValueType* search(std::string key) const;
-    void print(){
+    void print() const{
         std::cerr << "print()" << std::endl;
         for(int i = 0; i < NODE_ARRAY_SIZE; i++){
             printNodes(root.next[i], 0);
@@ -57,7 +57,7 @@ private:
         Node* next[NODE_ARRAY_SIZE] = {nullptr};
     };
     
-    void printNodes(Node* p, int depth){
+    void printNodes(Node* p, int depth) const{
         if(p == nullptr)
             return;
         if(p->subKey != ""){
@@ -65,11 +65,17 @@ private:
             if(p->isEnd){
 //                std::cerr << p->val;
                 
+                //for vector
 //                for(int i = 0; i < p->val.size(); i++){
 //                    std::cerr << p->val[i] << "|";
 //                }
                 
-                std::cerr << p->val.GetName();
+                //for unordered_set
+                for(auto it = p->val.begin(); it != p->val.end(); it++){
+                    std::cerr << *it << "|";
+                }
+                
+//                std::cerr << p->val.GetName();
             }
             else
                 std::cerr << "*";
@@ -166,6 +172,13 @@ void RadixTree<ValueType>::insert(std::string key, const ValueType& value){
 //pointer, the caller is free to modify the value held within the Radix Tree, e.g
 template <typename ValueType>
 ValueType* RadixTree<ValueType>::search(std::string key) const{
+    if(key == "")
+        return nullptr;
+    
+//    std::cerr << key << std::endl;
+    if(root.next[key[0]] == nullptr)
+        return nullptr;
+    
     Node* p = root.next[key[0]];
     std::string subKey = "";
     while(true){
@@ -216,6 +229,7 @@ void RadixTree<ValueType>::splitNode(Node *p, const std::string& key, const std:
         p->parent->next[subKey[0]] = new Node(subKey.substr(0, subKeyIndex), value, p->parent, isEnd);
         newNode = p->parent->next[subKey[0]];
     }
+    
     //update p, which is the parent of all the original Nodes that collide with the parameter key
     p->parent = newNode;
     p->subKey = subKey.substr(subKeyIndex);

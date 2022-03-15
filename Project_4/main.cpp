@@ -21,16 +21,16 @@ int main() {
         std::cout << "Error loading " << MEMBERS_FILE << std::endl;
         return 1;
     }
-//    AttributeTranslator at;
-//    if (!at.Load(TRANSLATOR_FILE))
-//    {
-//        std::cout << "Error loading " << TRANSLATOR_FILE << std::endl;
-//        return 1;
-//    }
-//
-//    while (findMatches(mdb, at))
-//        ;
-//
+    AttributeTranslator at;
+    if (!at.Load(TRANSLATOR_FILE))
+    {
+        std::cout << "Error loading " << TRANSLATOR_FILE << std::endl;
+        return 1;
+    }
+
+    while (findMatches(mdb, at))
+        ;
+
     std::cout << "Happy dating!" << std::endl;
     
     
@@ -52,6 +52,17 @@ int main() {
 //    for(int i = 0; i < v.size(); i++){
 //        std::cerr << (v[i]).attribute << "," << (v[i]).value << std::endl;
 //    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    ///PersonProfile Tests
+    ///////////////////////////////////////////////////////////////////////////////
+
+//    PersonProfile joe = PersonProfile("joe", "joe@mail.net");
+//    joe.AddAttValPair(AttValPair("trait", "funny"));
+//    AttValPair a;
+//    std::cerr << "Num Pairs: " << joe.GetNumAttValPairs() << std::endl;
+//    std::cerr << joe.GetAttVal(0, a) << std::endl;
+//    std::cerr << a.attribute << "," << a.value << std::endl;
     
     ///////////////////////////////////////////////////////////////////////////////
     ///RadixTree Tests
@@ -151,6 +162,11 @@ bool findMatches(const MemberDatabase& mdb, const AttributeTranslator& at)
 
       // Show member's attribute-value pairs
     std::cout << "The member has the following attributes:" << std::endl;
+    
+    //for testing
+//    std::cerr << pp->GetNumAttValPairs() << std::endl;
+//    std::cerr << pp->GetEmail() << std::endl;
+    
     for (int k = 0; k != pp->GetNumAttValPairs(); k++) {
         AttValPair av;
         pp->GetAttVal(k, av);

@@ -15,9 +15,7 @@ AttributeTranslator::AttributeTranslator(){
 
 //You may define a destructor for AttributeTranslator if you need one to free any dynamically
 //allocated memory used by your object.
-AttributeTranslator::~AttributeTranslator(){
-    
-}
+AttributeTranslator::~AttributeTranslator(){}
 
 //This method loads the attribute-value translation data from the data file specified by the
 //filename parameter. The method must load the data into a data structure that enables efficient
