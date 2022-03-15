@@ -39,7 +39,9 @@ public:
     ValueType* search(std::string key) const;
     void print(){
         std::cerr << "print()" << std::endl;
-        printNodes(root, 0);
+        for(int i = 0; i < NODE_ARRAY_SIZE; i++){
+            printNodes(root.next[i], 0);
+        }
     }
     
 private:
@@ -53,14 +55,18 @@ private:
         Node* next[NODE_ARRAY_SIZE] = {nullptr};
     };
     
+    struct RootNode{
+        Node* next[NODE_ARRAY_SIZE] = {nullptr};
+    };
+    
     void printNodes(Node* p, int depth){
         if(p == nullptr)
             return;
         if(p->subKey != ""){
             std::cerr << std::string(depth, '\t') << p->subKey << "||";
             if(p->isEnd)
-//                std::cerr << p->val;
-                std::cerr << "vector";
+                std::cerr << p->val;
+//                std::cerr << "vector";
             else
                 std::cerr << "*";
             std::cerr << std::endl;
@@ -73,22 +79,23 @@ private:
     
     void splitNode(Node* p, const std::string& key, const std::string& subKey, const int& subKeyIndex, const ValueType& value, const int& i, bool isEnd);
     
-    Node* root;
+    RootNode root;
 };
 
 //The RadixTree constructor.
 template <typename ValueType>
 RadixTree<ValueType>::RadixTree(){
     //create a dummy head node
-    root = new Node("", ValueType());
-    root->isEnd = false;
 }
 
 //You may define a destructor for RadixTree if you need one to free any dynamically allocated
 //memory used by your object.
 template <typename ValueType>
 RadixTree<ValueType>::~RadixTree(){
-    delete root;
+    for(int i = 0; i < NODE_ARRAY_SIZE; i++){
+        if(root.next[i] != nullptr)
+            delete root.next[i];
+    }
 }
 
 //The insert method must update the Radix Tree to associate the specified key string with a copy
@@ -96,8 +103,16 @@ RadixTree<ValueType>::~RadixTree(){
 //with the new value.
 template <typename ValueType>
 void RadixTree<ValueType>::insert(std::string key, const ValueType& value){
+    if(key == "")
+        return;
+    
     //loop through each character in the key
-    Node* p = root;
+    Node* p = root.next[key[0]];
+    if(p == nullptr){
+        root.next[key[0]] = new Node(key, value);
+        return;
+    }
+    
     int i = 0;
     int subKeyIndex = 0;
     for(; i < key.size(); i++){
@@ -147,8 +162,7 @@ void RadixTree<ValueType>::insert(std::string key, const ValueType& value){
 //pointer, the caller is free to modify the value held within the Radix Tree, e.g
 template <typename ValueType>
 ValueType* RadixTree<ValueType>::search(std::string key) const{
-    Node* p = root;
-    p = p->next[key[0]];
+    Node* p = root.next[key[0]];
     std::string subKey = "";
     while(true){
         if(p == nullptr)
@@ -182,11 +196,22 @@ RadixTree<ValueType>::Node::~Node(){
 
 template <typename ValueType>
 void RadixTree<ValueType>::splitNode(Node *p, const std::string& key, const std::string& subKey, const int& subKeyIndex, const ValueType& value, const int& i, bool isEnd){
-    //create new Node that will be the parent of the Nodes for our parameter key and the original Nodes already in the tree
-    p->parent->next[subKey[0]] = new Node(subKey.substr(0, subKeyIndex), value, p->parent, isEnd);
     
-    Node* newNode = p->parent->next[subKey[0]];
-
+    Node* newNode = nullptr;
+    
+    //if no parents
+    if(p->parent == nullptr){
+        //create new Node that will be the parent of the Nodes for our parameter key and the original Nodes already in the tree
+        root.next[subKey[0]] = new Node(subKey.substr(0, subKeyIndex), value, p->parent, isEnd);
+        newNode = root.next[subKey[0]];
+    }
+    
+    //otherwise, there are parents
+    else{
+        //create new Node that will be the parent of the Nodes for our parameter key and the original Nodes already in the tree
+        p->parent->next[subKey[0]] = new Node(subKey.substr(0, subKeyIndex), value, p->parent, isEnd);
+        newNode = p->parent->next[subKey[0]];
+    }
     //update p, which is the parent of all the original Nodes that collide with the parameter key
     p->parent = newNode;
     p->subKey = subKey.substr(subKeyIndex);
