@@ -11,7 +11,9 @@
 PersonProfile::PersonProfile(std::string name, std::string email) : name(name), email(email), numAVPairs(0){}
 
 //You may define a destructor for PersonProfile if you need one.
-PersonProfile::~PersonProfile(){}
+PersonProfile::~PersonProfile(){
+    std::cerr << "delete PersonProfile" << std::endl;
+}
 
 //std::string GetName() const
 std::string PersonProfile::GetName() const{

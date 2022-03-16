@@ -131,15 +131,23 @@ const PersonProfile* MemberDatabase::GetMemberByEmail(std::string email) const{
 bool MemberDatabase::addPerson(std::string& name, std::string& email, std::vector<std::string>& attValPairsString, bool& isAttValPair, bool& isName){
     //insert emailToProfiles
     
+    
     PersonProfile* profile = emailToProfile.search(email);
+        
     
     //if this person already exists, return false
     if(profile != nullptr)
         return false;
     
+    std::cerr << "delete1" << std::endl;
+    
     //otherwise, person doesn't exist already, so insert into RadixTree and push into profiles vector
     emailToProfile.insert(email, PersonProfile(name, email));
+    
+    std::cerr << "delete2" << std::endl;
+    
     profile = emailToProfile.search(email);
+    
     
     for(int i = 0; i < attValPairsString.size(); i++){
         std::string aVPair = attValPairsString[i];
@@ -152,7 +160,7 @@ bool MemberDatabase::addPerson(std::string& name, std::string& email, std::vecto
         //if there are already emails for this particular att-val pair, add email
         if(emails != nullptr){
             bool hasDuplicateEmail = false;
-            for(int i = 0; i < email.size(); i++){
+            for(int i = 0; i < emails->size(); i++){
                 if((*emails)[i] == email){
                     hasDuplicateEmail = true;
                     break;

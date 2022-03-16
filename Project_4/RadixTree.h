@@ -100,6 +100,7 @@ RadixTree<ValueType>::RadixTree(){}
 //memory used by your object.
 template <typename ValueType>
 RadixTree<ValueType>::~RadixTree(){
+    std::cerr << "delete RadixTree" << std::endl;
     for(int i = 0; i < NODE_ARRAY_SIZE; i++){
         if(root.next[i] != nullptr)
             delete root.next[i];
@@ -114,12 +115,15 @@ void RadixTree<ValueType>::insert(std::string key, const ValueType& value){
     if(key == "")
         return;
     
-    //loop through each character in the key
-    Node* p = root.next[key[0]];
-    if(p == nullptr){
-        root.next[key[0]] = new Node(key, value);
+    //loop through each character in the key;
+    if(root.next[key[0]] == nullptr){
+        std::cerr << "delete3" << std::endl;
+        root.next[key[0]] = new Node(key, value, nullptr);
+        std::cerr << "delete4" << std::endl;
         return;
     }
+    
+    Node* p = root.next[key[0]];
     
     int i = 0;
     int subKeyIndex = 0;
