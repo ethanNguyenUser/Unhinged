@@ -45,34 +45,41 @@ std::vector<EmailCount> MatchMaker::IdentifyRankedMatches(std::string email, int
         person->GetAttVal(i, temp);
         std::vector<AttValPair> compAVPairsVector = at.FindCompatibleAttValPairs(temp);
         for(int j = 0; j < compAVPairsVector.size(); j++){
-            compAVPairs.insert(compAVPairsVector[i].attribute + "," + compAVPairsVector[i].value);
+            compAVPairs.insert(compAVPairsVector[j].attribute + "," + compAVPairsVector[j].value);
         }
     }
-    
-    std::cerr << compAVPairs.size() << std::endl;
-    
+        
     //find all members who have the matching attributes
     std::unordered_map<std::string, int> emailCounts;
+    std::unordered_set<std::string> emails;
     for(std::unordered_set<std::string>::iterator it = compAVPairs.begin(); it != compAVPairs.end(); it++){
         size_t commaIndex = it->find(',');
-        std::vector<std::string> emails = mdb.FindMatchingMembers(AttValPair(it->substr(0, commaIndex), it->substr(commaIndex + 1)));
-        
-        //loop through vector of emails that have this particular compatible att-val pair
-        for(int i = 0; i < emails.size(); i++){
-            std::unordered_map<std::string, int>::iterator it1 = emailCounts.find(emails[i]);
+        std::vector<std::string> emailsVector = mdb.FindMatchingMembers(AttValPair(it->substr(0, commaIndex), it->substr(commaIndex + 1)));
             
-            //if the email exists, increment the count in the emailCounts map
-            if(it1 != emailCounts.end()){
-                (it1->second)++;
+        //loop through vector of emails that have this particular compatible att-val pair, converting to unordered_set
+        for(int i = 0; i < emailsVector.size(); i++){
+            //skip counting self
+            if(email == emailsVector[i])
+                continue;
+            
+            //if the email isn't in the map yet, so insert a new map
+            if(emails.insert(emailsVector[i]).second){
+                emailCounts.insert({emailsVector[i], 1});
+            }
+            
+            //otherwise, the email is already in the map, so increment the count of the map
+            else{
+                (emailCounts.find(emailsVector[i])->second)++;
             }
         }
     }
-    
+        
     std::vector<EmailCount> emailCountsVector;
     
     //convert unordered_map emailCounts into vector of EmailCount's
     for(std::unordered_map<std::string, int>::iterator it = emailCounts.begin(); it != emailCounts.end(); it++){
-        emailCountsVector.push_back(EmailCount(it->first, it->second));
+        if(it->second >= threshold)
+            emailCountsVector.push_back(EmailCount(it->first, it->second));
     }
     
     //sort emailCountsVector
@@ -85,6 +92,6 @@ bool MatchMaker::compareEmailCounts(EmailCount e1, EmailCount e2){
     if(e1.count == e2.count){
         return e1.email < e2.email;
     }
-    return e2.count > e1.count;
+    return e2.count < e1.count;
 }
 
