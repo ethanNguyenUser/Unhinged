@@ -82,6 +82,8 @@ bool MemberDatabase::LoadDatabase(std::string filename){
         
         //extract att-val pair information
         if(countAttValPairs != 0){
+//            if(std::find(attValPairsString.begin(), attValPairsString.end(), line) == attValPairsString.end())
+//                attValPairsString.push_back(line);
             attValPairsString.push_back(line);
             countAttValPairs--;
             continue;
@@ -137,11 +139,12 @@ bool MemberDatabase::addPerson(std::string& name, std::string& email, std::vecto
     
     //otherwise, person doesn't exist already, so insert into RadixTree and push into profiles vector
     emailToProfile.insert(email, PersonProfile(name, email));
+    profile = emailToProfile.search(email);
     
     for(int i = 0; i < attValPairsString.size(); i++){
         std::string aVPair = attValPairsString[i];
         size_t commaIndex = aVPair.find(',');
-        std::cerr << aVPair.substr(0, commaIndex) << "," << aVPair.substr(commaIndex + 1);
+        
         profile->AddAttValPair(AttValPair(aVPair.substr(0, commaIndex), aVPair.substr(commaIndex + 1)));
         
         //insert aVPairToEmails

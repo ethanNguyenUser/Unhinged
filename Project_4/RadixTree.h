@@ -94,9 +94,7 @@ private:
 
 //The RadixTree constructor.
 template <typename ValueType>
-RadixTree<ValueType>::RadixTree(){
-    //create a dummy head node
-}
+RadixTree<ValueType>::RadixTree(){}
 
 //You may define a destructor for RadixTree if you need one to free any dynamically allocated
 //memory used by your object.
@@ -175,10 +173,9 @@ ValueType* RadixTree<ValueType>::search(std::string key) const{
     if(key == "")
         return nullptr;
     
-//    std::cerr << key << std::endl;
     if(root.next[key[0]] == nullptr)
         return nullptr;
-    
+
     Node* p = root.next[key[0]];
     std::string subKey = "";
     while(true){

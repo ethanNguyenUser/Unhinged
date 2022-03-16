@@ -38,7 +38,7 @@ int main() {
     ///////////////////////////////////////////////////////////////////////////////
     ///MemberDatabase Tests
     ///////////////////////////////////////////////////////////////////////////////
-    
+        
 //    std::vector<std::string> v = mdb.FindMatchingMembers(AttValPair("hobby", "canyoneering"));
 //    for(int i = 0; i < v.size(); i++){
 //        std::cerr << v[i] << std::endl;
@@ -58,12 +58,14 @@ int main() {
     ///////////////////////////////////////////////////////////////////////////////
 
 //    PersonProfile joe = PersonProfile("joe", "joe@mail.net");
+//    joe.AddAttValPair(AttValPair("trait", "bleh"));
+//    joe.AddAttValPair(AttValPair("trait", "funny"));
 //    joe.AddAttValPair(AttValPair("trait", "funny"));
 //    AttValPair a;
 //    std::cerr << "Num Pairs: " << joe.GetNumAttValPairs() << std::endl;
 //    std::cerr << joe.GetAttVal(0, a) << std::endl;
 //    std::cerr << a.attribute << "," << a.value << std::endl;
-    
+//
     ///////////////////////////////////////////////////////////////////////////////
     ///RadixTree Tests
     ///////////////////////////////////////////////////////////////////////////////

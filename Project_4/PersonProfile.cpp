@@ -34,10 +34,12 @@ void PersonProfile::AddAttValPair(const AttValPair& attval){
     
     //the unordered_set of values for the parameter attribute exists
     if(values != nullptr){
-        if(std::find(values->begin(), values->end(), attval.value) != values->end()){
+        if(values->find(attval.value) == values->end()){
             numAVPairs++;
+            values->insert(attval.value);
             aVPairsVector.push_back(AttValPair(attval.attribute, attval.value));
         }
+        return;
     }
     
     //otherwise, insert a new unordered_set

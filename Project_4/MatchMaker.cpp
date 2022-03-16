@@ -37,7 +37,7 @@ MatchMaker::~MatchMaker(){}
 std::vector<EmailCount> MatchMaker::IdentifyRankedMatches(std::string email, int threshold) const{
     //Using the provided email address to obtain the member’s attribute-value pairs (e.g., “hobby”,”eating”, etc.)
     const PersonProfile* person = mdb.GetMemberByEmail(email);
-    std::unordered_set<AttValPair*> compAVPairs;
+    std::unordered_set<std::string> compAVPairs;
     
     //store all of this person's compatible att-val pairs a hash set
     for(int i = 0; i < person->GetNumAttValPairs(); i++){
@@ -45,14 +45,17 @@ std::vector<EmailCount> MatchMaker::IdentifyRankedMatches(std::string email, int
         person->GetAttVal(i, temp);
         std::vector<AttValPair> compAVPairsVector = at.FindCompatibleAttValPairs(temp);
         for(int j = 0; j < compAVPairsVector.size(); j++){
-            compAVPairs.insert(&compAVPairsVector[i]);
+            compAVPairs.insert(compAVPairsVector[i].attribute + "," + compAVPairsVector[i].value);
         }
     }
     
+    std::cerr << compAVPairs.size() << std::endl;
+    
     //find all members who have the matching attributes
     std::unordered_map<std::string, int> emailCounts;
-    for(std::unordered_set<AttValPair*>::iterator it = compAVPairs.begin(); it != compAVPairs.end(); it++){
-        std::vector<std::string> emails = mdb.FindMatchingMembers(**it);
+    for(std::unordered_set<std::string>::iterator it = compAVPairs.begin(); it != compAVPairs.end(); it++){
+        size_t commaIndex = it->find(',');
+        std::vector<std::string> emails = mdb.FindMatchingMembers(AttValPair(it->substr(0, commaIndex), it->substr(commaIndex + 1)));
         
         //loop through vector of emails that have this particular compatible att-val pair
         for(int i = 0; i < emails.size(); i++){
